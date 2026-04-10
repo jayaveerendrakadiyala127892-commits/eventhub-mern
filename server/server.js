@@ -6,8 +6,30 @@ require("dotenv").config()
 
 const app = express()
 
-//  Middleware
-app.use(cors())
+// Middleware
+const allowedOrigins = [
+  "http://localhost:5173",
+  "http://localhost:3000",
+  process.env.FRONTEND_URL,
+].filter(Boolean)
+
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      // Allow requests with no origin (mobile apps, curl, etc.)
+      if (!origin) return callback(null, true)
+      if (allowedOrigins.indexOf(origin) !== -1) {
+        return callback(null, true)
+      }
+      // Allow all origins that end with vercel.app or netlify.app
+      if (origin.endsWith(".vercel.app") || origin.endsWith(".netlify.app")) {
+        return callback(null, true)
+      }
+      return callback(null, true) // permissive for now
+    },
+    credentials: true,
+  })
+)
 app.use(express.json())
 
 //  Serve uploaded images statically

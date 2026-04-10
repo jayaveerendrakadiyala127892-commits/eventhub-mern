@@ -63,17 +63,18 @@ router.post(
       const { title, date, location, category, description, maxCapacity } = req.body
 
       // Build cover image URL
+      const backendUrl = process.env.BACKEND_URL || "http://localhost:5000"
       let coverImageUrl = "https://via.placeholder.com/400x200?text=EventHub"
       if (req.files && req.files["coverImage"]) {
         const filename = req.files["coverImage"][0].filename
-        coverImageUrl = `http://localhost:5000/uploads/${filename}`
+        coverImageUrl = `${backendUrl}/uploads/${filename}`
       }
 
       // Build extra images URLs
       let extraImageUrls = []
       if (req.files && req.files["extraImages"]) {
         extraImageUrls = req.files["extraImages"].map(
-          (file) => `http://localhost:5000/uploads/${file.filename}`
+          (file) => `${backendUrl}/uploads/${file.filename}`
         )
       }
 
@@ -117,17 +118,18 @@ router.put(
       const { title, date, location, category, description, maxCapacity } = req.body
 
       // Update cover image only if new one uploaded
+      const backendUrl = process.env.BACKEND_URL || "http://localhost:5000"
       let coverImageUrl = event.image
       if (req.files && req.files["coverImage"]) {
         const filename = req.files["coverImage"][0].filename
-        coverImageUrl = `http://localhost:5000/uploads/${filename}`
+        coverImageUrl = `${backendUrl}/uploads/${filename}`
       }
 
       // Update extra images only if new ones uploaded
       let extraImageUrls = event.extraImages
       if (req.files && req.files["extraImages"]) {
         extraImageUrls = req.files["extraImages"].map(
-          (file) => `http://localhost:5000/uploads/${file.filename}`
+          (file) => `${backendUrl}/uploads/${file.filename}`
         )
       }
 
